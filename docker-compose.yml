@@ -1,0 +1,33 @@
+services:
+  sdwu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: flux
+    volumes:
+      - ./flux:/flux:z
+      - venv:venv:z
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+      - COMMANDLINE_ARGS="--skip-torch-cuda-test"
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    # networks:
+    #   network:
+    #     ipv4_address: $ADCM_HOST
+
+# networks:
+#   network:
+#     driver: bridge
+#     name: $NETW_NAME
+#     ipam:
+#       config:
+#         - subnet: $NETW_ADDR
+#           gateway: $NETW_GATE
