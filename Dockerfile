@@ -31,7 +31,7 @@ RUN echo "export PYTHONUSERBASE=/home/flux/.local" >> /home/flux/.bashrc && \
     echo "export PATH=/home/flux/.local/bin:$PATH" >> /home/flux/.bashrc
 
 # Создание рабочей директории для flux
-WORKDIR /flux
+WORKDIR /home/flux
 
 # Копирование flux
 COPY flux/* /home/flux

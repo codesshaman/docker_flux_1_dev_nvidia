@@ -2,7 +2,7 @@
 PYTHON_VERSION="$(grep "PYTHON_VERSION" .env | sed -r 's/.{,15}//')"
 DIR="/home/${USER}/.local/lib/python$PYTHON_VERSION/site-packages/"
 
-cd stable-diffusion-webui
+cd flux
 git pull
 cd ..
 
