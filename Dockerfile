@@ -20,24 +20,24 @@ RUN python3 -m ensurepip && \
     python3 -m pip install --upgrade pip
 
 # Создание non-root пользователя
-RUN useradd -m -s /bin/bash diffustion
+RUN useradd -m -s /bin/bash flux
 
 # Настройка прав на директорию
-RUN mkdir -p /home/diffustion/.local/lib/python3.10/site-packages && \
-    chown -R diffustion:diffustion /home/diffustion/.local
+RUN mkdir -p /home/flux/.local/lib/python3.10/site-packages && \
+    chown -R flux:flux /home/flux/.local
 
 # Настройка переменных окружения для non-root пользователя
-RUN echo "export PYTHONUSERBASE=/home/diffustion/.local" >> /home/diffustion/.bashrc && \
-    echo "export PATH=/home/diffustion/.local/bin:$PATH" >> /home/diffustion/.bashrc
+RUN echo "export PYTHONUSERBASE=/home/flux/.local" >> /home/flux/.bashrc && \
+    echo "export PATH=/home/flux/.local/bin:$PATH" >> /home/flux/.bashrc
 
-# Создание рабочей директории для stable-diffusion gui
-WORKDIR /stable-diffusion-webui
+# Создание рабочей директории для flux
+WORKDIR /flux
 
-# Копирование stable-diffusion gui
-COPY stable-diffusion-webui/* /stable-diffusion-webui
+# Копирование flux
+COPY flux/* /home/flux
 
 # Переключение на non-root пользователя
-USER diffustion
+USER flux
 
 # Установка зависимостей для PyTorch
 RUN pip install torch==2.0.1 --find-links https://download.pytorch.org/whl/cpu && \
