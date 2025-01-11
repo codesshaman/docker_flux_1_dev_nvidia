@@ -52,6 +52,7 @@ env:
 		echo "$(ERROR_COLOR).env file already exists!$(NO_COLOR)"; \
 	else \
 		cp .env.example .env; \
+		echo "$(GREEN).env file successfully created!$(NO_COLOR)"; \
 	fi
 
 git:
