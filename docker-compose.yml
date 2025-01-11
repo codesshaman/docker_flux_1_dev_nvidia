@@ -6,7 +6,7 @@ services:
     container_name: flux
     volumes:
       - ./flux:/flux:z
-      - venv:venv:z
+      # - venv:venv:z
     restart: unless-stopped
     environment:
       - PYTHONUNBUFFERED=1

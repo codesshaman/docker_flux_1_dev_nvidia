@@ -5,14 +5,15 @@ FROM python:3.10-slim-bullseye
 RUN apt update && apt install -y \
     python3-dev \
     python3-pip \
-    gcc \
-    g++ \
+    build-essential \
+#     gcc \
+#     g++ \
     git \
-    libffi-dev \
-    libomp-dev \
-    make \
-    bash \
-    curl \
+#     libffi-dev \
+#     libomp-dev \
+#     make \
+#     bash \
+#     curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Установка и обновление pip
@@ -34,14 +35,25 @@ RUN echo "export PYTHONUSERBASE=/home/flux/.local" >> /home/flux/.bashrc && \
 WORKDIR /home/flux
 
 # Копирование flux
-COPY flux/* /home/flux
+COPY flux/. /home/flux
 
-# Переключение на non-root пользователя
+# Настройка прав на каталог, чтобы избежать ошибок записи
+RUN chown -R flux:flux /home/flux/src/flux && \
+    chmod -R 777 /home/flux
+
+# Переключаемся на non-root пользователя после установки зависимостей
 USER flux
 
-# Установка зависимостей для PyTorch
-RUN pip install torch==2.0.1 --find-links https://download.pytorch.org/whl/cpu && \
-    pip install -r requirements.txt
+# Создаём виртуальное окружение и устанавливаем зависимости от имени root
+RUN python3 -m venv .venv && \
+    . .venv/bin/activate && \
+    pip install --upgrade pip && \
+    pip install -e ".[all]"
 
-# Команда для запуска приложения
-CMD ["python3", "launch.py", "--skip-torch-cuda-test"]
+# Настройка переменных окружения для non-root пользователя
+RUN echo "export PYTHONUSERBASE=/home/flux/.local" >> /home/flux/.bashrc && \
+    echo "export PATH=/home/flux/.local/bin:$PATH" >> /home/flux/.bashrc
+
+# Запускаем
+# CMD ["/bin/bash"]
+CMD ["tail", "-f", "/dev/null"]

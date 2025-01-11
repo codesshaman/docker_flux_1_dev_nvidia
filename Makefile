@@ -35,12 +35,12 @@ help:
 
 build:
 	@printf "$(YELLOW)==== Building configuration ${name}... ====$(NO_COLOR)\n"
-	@bash scripts/build.sh
+	# @bash scripts/build.sh
 	@docker-compose -f ./docker-compose.yml up -d --build
 
 conn:
 	@printf "$(ERROR_COLOR)==== Connect to dash container... ====$(NO_COLOR)\n"
-	@docker exec -it stable-diffusion bash
+	@docker exec -it flux bash
 
 down:
 	@printf "$(ERROR_COLOR)==== Stopping configuration ${name}... ====$(NO_COLOR)\n"
@@ -49,9 +49,10 @@ down:
 env:
 	@printf "$(ERROR_COLOR)==== Create environment file for ${name}... ====$(NO_COLOR)\n"
 	@if [ -f .env ]; then \
-		rm .env; \
-	fi; \
-	cp .env.example .env
+		echo "$(ERROR_COLOR).env file already exists!$(NO_COLOR)"; \
+	else \
+		cp .env.example .env; \
+	fi
 
 git:
 	@printf "$(YELLOW)==== Set user name and email to git for ${name} repo... ====$(NO_COLOR)\n"
